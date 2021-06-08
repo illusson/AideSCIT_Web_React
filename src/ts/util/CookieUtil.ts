@@ -1,7 +1,6 @@
-import {Map} from "../core/Map";
-import {Log} from "./Log";
+import {Map} from "./Map";
 
-export class CookieUnit {
+export class CookieUtil {
     public static set(key: string, value: string, expired: Date | null = null, path: string | null = null){
         let cookie = key + "=" + value;
         if (expired != null){
@@ -19,7 +18,7 @@ export class CookieUnit {
     }
 
     public static get(key: string): string | null {
-        const cookies: Map<string, string> = CookieUnit.getAll();
+        const cookies: Map<string, string> = CookieUtil.getAll();
         if (cookies.indexOf(key) !== -1){
             return cookies.get(key);
         } else {

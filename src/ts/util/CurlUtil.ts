@@ -1,4 +1,4 @@
-import {Map, MapForEachCallback} from "../core/Map";
+import {Map, MapForEachCallback} from "./Map";
 
 export class CurlClientBuilder {
     private follow_location: boolean = true;
@@ -192,7 +192,7 @@ export class CurlCall {
         this.xmlRequest.ontimeout = function (e){
             callback.onFailure(call_this, new CurlToolException(e.type), requestId);
         }
-        this.xmlRequest.onloadend = function (e){
+        this.xmlRequest.onloadend = function () {
             callback.onResponse(call_this, new CurlResponse (
                 call_this.xmlRequest.status,
                 call_this.responseHeader,

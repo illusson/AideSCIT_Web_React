@@ -1,4 +1,4 @@
-import {Map, MapForEachCallback} from "./Map";
+import {Map, MapForEachCallback} from "../util/Map";
 
 export class SharedPreferences {
     private readonly name: string;
