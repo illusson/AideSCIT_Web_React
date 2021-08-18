@@ -1,3 +1,21 @@
 .primary-background {
-    background: transparent;
+    background-color: transparent;
+}
+
+.home-header {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+#home-logo {
+    height: 3em;
+    width: 3em;
+}
+
+.home-drawer {
+    width: 20em;
+}
+
+.MuiDrawer-paperAnchorDockedLeft {
+    border-right: none;
 }

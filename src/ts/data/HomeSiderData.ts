@@ -5,7 +5,7 @@ export class HomeSiderData {
     public readonly child: Array<HomeSiderChildData>;
     public readonly path: string;
 
-    constructor(image: string, title: string, key: string, child: Array<HomeSiderChildData>, path: string) {
+    constructor(image: string, title: string, key: string, path: string, child: Array<HomeSiderChildData> = new Array<HomeSiderChildData>()) {
         this.icon = image;
         this.title = title;
         this.key = key;

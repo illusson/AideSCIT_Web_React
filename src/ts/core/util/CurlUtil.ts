@@ -1,8 +1,8 @@
-import {Map, MapForEachCallback} from "./Map";
-
 export class CurlClientBuilder {
     private follow_location: boolean = true;
     private timeout: number = 30;
+
+    private CurlClientBuilder(){ }
 
     public static getInterface(): CurlClientBuilder {
         return new CurlClientBuilder();
@@ -61,11 +61,12 @@ export class CurlRequestBuilder {
     }
 
     public addCookie(key: string, value: any): CurlRequestBuilder {
-        if (this.headers.indexOf("Cookie")){
+        const cookie = this.headers.get("Cookie")
+        if (cookie === undefined){
             this.headers.set("Cookie", "");
+        } else {
+            this.headers.set("Cookie", cookie + key + "=" + value.toString() + "; ");
         }
-        this.headers.set("Cookie", this.headers.get("Cookie")
-            + key + "=" + value.toString() + "; ");
         return this;
     }
 
@@ -118,23 +119,17 @@ export class FormBodyBuilder {
     public build(app_secret: string = ""): FormBody {
         let form_string = "";
         let body_string = "";
-        this.body.forEach(new class implements MapForEachCallback<string, any> {
-            onEach(key: string, value: any, map: Map<string, any>) {
+        this.body.forEach(function (value, key) {
                 if (form_string !== "") {
                     form_string = form_string + "&";
                 }
-                // if (key !== "access_token") {
-                    form_string = form_string + key + "=" + value;
-                // }
+                form_string = form_string + key + "=" + value;
 
                 if (body_string !== "") {
                     body_string = body_string + "&";
                 }
-                // if (key !== "access_token"){
-                    body_string = body_string + key + "=" + encodeURIComponent(value);
-                // }
-            }
-        }())
+                body_string = body_string + key + "=" + encodeURIComponent(value);
+        })
         if (app_secret !== ""){
             if (body_string !== ""){
                 body_string = body_string + "&";
@@ -172,11 +167,9 @@ export class CurlCall {
             this.xmlRequest.timeout = client.getTimeout();
             this.url = request.getUrl();
             const this_CurlCall = this;
-            request.getHeaders().forEach(new class implements MapForEachCallback<string, string> {
-                onEach(key: string, value: any, map: Map<string, string>): void {
+            request.getHeaders().forEach(function (value, key) {
                     this_CurlCall.xmlRequest.setRequestHeader(key, value);
-                }
-            }())
+            })
             if (request.getBody() !== null){
                 this.method = "POST";
                 this.body = request.getBody();
@@ -256,7 +249,7 @@ export class CurlResponse {
         return this.code_value;
     }
 
-    public header(key: string): string|null {
+    public header(key: string): string|undefined {
         return this.headers_array.get(key);
     }
 

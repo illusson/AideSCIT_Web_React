@@ -1,21 +1,23 @@
-import {ReactComponentCompact} from "../core/ReactComponentCompact";
+import {RouteComponent} from "../../core/RouteComponent";
+import "../../../res/css/Welcome.css"
+
 import {withRouter} from "react-router-dom";
-import "../../res/css/Welcome.css"
-import ic_launcher from "../../res/drawble/mipmap/ic_launcher.png"
+import ic_launcher from "../../../res/drawble/mipmap/ic_launcher.png"
 import {Progress, Row} from "antd";
 
-class Welcome extends ReactComponentCompact {
+class Welcome extends RouteComponent {
     state = {
         setup_process: 0,
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         this.setState({
             setup_process: 10,
         })
+        // this.redirect("/home")
     }
 
-    render() {
+    public render() {
         return (
             <div id={"welcome-base"}>
                 <>
@@ -23,7 +25,7 @@ class Welcome extends ReactComponentCompact {
                         <img id={"welcome-logo"} src={ic_launcher} alt={"logo"}/>
                     </Row>
                     <Row>
-                        <Progress className={"welcome-loading"} percent={this.state.setup_process} status={"active"} showInfo={false} />
+                        <Progress percent={this.state.setup_process} status={"active"} showInfo={false} />
                     </Row>
                 </>
             </div>

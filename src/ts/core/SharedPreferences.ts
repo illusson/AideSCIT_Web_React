@@ -1,5 +1,3 @@
-import {Map, MapForEachCallback} from "../util/Map";
-
 export class SharedPreferences {
     private readonly name: string;
     private strings: Map<string, string> = new Map<string, string>();
@@ -60,7 +58,7 @@ export class SharedPreferences {
 
     public getString(key: string, default_value: string): string {
         const value = this.strings.get(key)
-        if (this.strings.indexOf(key) !== -1 && value !== null){
+        if (value !== undefined){
             return value
         } else {
             return default_value;
@@ -69,7 +67,7 @@ export class SharedPreferences {
 
     public getNumber(key: string, default_value: number): number {
         const value = this.numbers.get(key)
-        if (this.numbers.indexOf(key) !== -1 && value !== null){
+        if (value !== undefined){
             return value
         } else {
             return default_value;
@@ -78,7 +76,7 @@ export class SharedPreferences {
 
     public getBoolean(key: string, default_value: boolean): boolean {
         const value = this.booleans.get(key)
-        if (this.booleans.indexOf(key) !== -1 && value !== null){
+        if (value !== undefined){
             return value
         } else {
             return default_value;
@@ -139,37 +137,31 @@ export class SharedPreferencesEditor {
 }
 
 class SharedPreferencesBuilder {
-    public static toString(strings: Map<string, string>, numbers: Map<string, number>, booleans: Map<string, boolean>){
+    static toString(strings: Map<string, string>, numbers: Map<string, number>, booleans: Map<string, boolean>){
         const xml_object: XMLDocument = document.implementation.createDocument(
             "", "map", null
         );
-        strings.forEach(new class implements MapForEachCallback<string, string> {
-            onEach(key: string, value: string, map: Map<string, string>) {
-                const string_item = xml_object.createElement("string");
-                string_item.setAttribute("name", key);
-                string_item.appendChild(xml_object.createTextNode(value));
-                xml_object.getElementsByTagName("map")[0]
-                    .appendChild(string_item);
-            }
-        }())
-        numbers.forEach(new class implements MapForEachCallback<string, number> {
-            onEach(key: string, value: number, map: Map<string, number>) {
+        strings.forEach(function (value, key) {
+            const string_item = xml_object.createElement("string");
+            string_item.setAttribute("name", key);
+            string_item.appendChild(xml_object.createTextNode(value));
+            xml_object.getElementsByTagName("map")[0]
+                .appendChild(string_item);
+        })
+        numbers.forEach(function (value, key) {
                 const number_item = xml_object.createElement("number");
                 number_item.setAttribute("name", key);
                 number_item.setAttribute("value", value.toString());
                 xml_object.getElementsByTagName("map")[0]
                     .appendChild(number_item);
-            }
-        }())
-        booleans.forEach(new class implements MapForEachCallback<string, boolean> {
-            onEach(key: string, value: boolean, map: Map<string, boolean>) {
+        })
+        booleans.forEach(function (value, key) {
                 const boolean_item = xml_object.createElement("boolean");
                 boolean_item.setAttribute("name", key);
                 boolean_item.setAttribute("value", value.toString());
                 xml_object.getElementsByTagName("map")[0]
                     .appendChild(boolean_item);
-            }
-        }())
+        })
         return new XMLSerializer().serializeToString(xml_object);
     }
 }
